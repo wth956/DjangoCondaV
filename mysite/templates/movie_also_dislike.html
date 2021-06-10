@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+	<h2>人們不喜歡這個電影，也會不喜歡另一個...</h2>
+	<h5><i>註：假設評分3分(含)以上，表示喜歡。評分2分(含)以下，表示不喜歡。</i></h5>
+{% endblock %}
+{% block content %}
+	<form method='POST'>
+		{% csrf_token %}
+		<table>
+			{{form.as_table}}
+		</table>
+		<button type="submit" class="btn btn-primary">確定</button>
+	</form>
+	<h3>也同時不喜歡...(數字表示不喜歡人數)</h3>
+	{% for movie in answer %}
+		<p>
+			{% for item in movie %}
+				<td>{{item}}</td>
+			{% endfor %}
+		</p>
+	{% endfor %}
+{% endblock %}

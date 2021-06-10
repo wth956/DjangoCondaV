@@ -1,0 +1,12 @@
+name: djangov
+channels:
+- defaults
+dependencies:
+- python=3.5.6
+- pip==10.0.*
+- numpy==1.14.*
+- pip:
+  - django==1.8.18
+  - django-jinja==2.4.1
+  - django-bootstrap3==9.1.0
+  - django-registration==2.3

@@ -1,0 +1,91 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Recommender Systems</title>
+    <!-- D3-->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <!-- Bootstrap local file-->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+    <!-- default BootstrapCDN -->
+<!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"> -->
+    <style>
+        body{
+          background-image: url("{% static "img/witewall_3.png" %}");
+          font-family: "Times New Roman", "微軟正黑體","Microsoft JhengHei", Serif;
+        }
+
+        .usericon, .usericon a {
+          color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- JS local file-->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript"></script>
+  
+
+
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Movie Recommendation</a>
+            </div>
+            <div>
+              <ul class="nav navbar-nav">
+                <li><a href="/high_rate">熱門電影-平均最高分</a></li>
+                <li><a href="/top_rate">熱門電影-最多人評分</a></li>          
+                <li><a href="/movie_also_like">也會喜歡</a></li>
+                <li><a href="/movie_also_dislike">也會不喜歡</a></li>
+                <li><a href="/movie_rcmd_exist_user">推薦給現有使用者</a></li>
+                <!-- <li><a href="/">推薦給臨時新使用者</a></li> -->
+
+                {% if user.is_authenticated %}
+                    <li><a href="/movie_rcmd_to_user">推薦給{{user.username}}</a></li>
+<!--                     <li><a href="/">與{{user.username}}最像的人</a></li>
+                    <li><a href="/">{{user.username}}最喜歡樂團</a></li>
+                    <li><a href="/">{{user.username}}評分詳情</a></li> -->
+                {% endif %}
+                        
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+               <!--  <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign up</a></li> -->
+                {% if user.is_authenticated %}
+                    <li><a href="/"><li><a href="/"><span class="glyphicon glyphicon-user usericon"> Hi! {{ user.username }}</a></li>
+                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    
+                {% else %}
+                    <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li><a href='/accounts/register/'><span class="glyphicon glyphicon-list-alt"></span> Sign up</a></li>
+                {% endif %}
+              </ul>
+            </div>
+
+
+        </div>
+    </nav>
+    <div class="container-fluid">  
+        {% block title %}
+        空白標題
+        {% endblock %}
+        {% block content %}
+        空白內容
+        {% endblock %}
+    </div>  
+    </body>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+</body>
+</html>
+  

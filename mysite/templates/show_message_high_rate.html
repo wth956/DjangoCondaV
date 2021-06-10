@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+   <div class ="panel-heading"><h2>排行榜</h2>
+{% endblock %}
+{% block content %}
+<!-- row and .col-xs-4 are predefined grid classes -->
+<!-- 	<div class="row">
+	{%if result%}
+	
+		{% for data in result %}
+			<div class="col-md-4">
+				<p>{{ data.1 }}</p>
+			</div>
+		{% endfor %}
+	{% else %}
+		<p>No result are available.</p>
+	{% endif %}
+	</div> -->
+
+    <table class="table">
+        <thead>
+            <tr class="bg-info">
+                <th>#</th>
+                <th>Movie</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+    <tbody>
+        {% for data in result %}
+        <tr>
+            <td>{{ data.3 }}</td>
+            <td>{{ data.1 }}</td>
+            <td>{{ data.2 }}</td>			
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

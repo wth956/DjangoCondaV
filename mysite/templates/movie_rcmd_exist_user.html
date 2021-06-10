@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+  <h2>選一個使用者，推薦他可能會喜歡的電影</h2>
+  <h4>
+  <p>(1)找鄰居：先找Top-K個最相似的鄰居</p>
+  <p>(2)找電影：從K個鄰居喜歡的電影中，計算其加權評分，推薦Top-N最高分電影</p>
+  </h4>
+{% endblock %}
+
+{% block content %}
+  <form method='POST'>
+    {% csrf_token %}
+    <table>
+      {{form.as_p}}
+    </table>
+        <button type="submit" class="btn btn-primary">推薦</button>
+  </form>
+  
+  <!--若有電影推薦結果傳過來，則顯示出來-->
+  {% if answer %}
+    <h2>推薦的電影與預測評分</h2>
+    {% for movie in answer %}
+      <p>
+        {% for item in movie %}
+          <td>{{item}}</td>
+        {% endfor %}
+      </p>
+    {% endfor %}
+  {% endif %}
+  <!--若有鄰居結果傳過來，則顯示出來-->
+  {% if neighbors %}
+    <h2>最相似的鄰居(數字表相似度..公式通常是cosine,pearson等)</h2>
+    {% for neighbor in neighbors%}
+      <p>
+        {% for item in neighbor %}
+          <td>{{item}}</td>
+        {% endfor %}
+      </p>
+    {% endfor %}
+  {% endif %}
+{% endblock %}

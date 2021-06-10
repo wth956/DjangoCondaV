@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block title %}
+<div class="row">
+    <!-- <div class="col-xs-12 col-md-4"> -->
+        <div class="col-6 col-md-4">
+            <h2 class="text-center"><em>{{ movie.name }}</em></h2>        
+            <img src= "{{ MEDIA_URL }}{{ movie.id }}.jpg" alt="..." class="img-thumbnail">
+            <h5>有{{ movie.rating_set.count }}人評分 (平均{{ movie.average_rating | floatformat }}分)</h5>    
+        </div>
+        <div class="col-6 col-md-4" id="area1"></div>
+
+        <script>
+            // function test_func(resultlst) {
+            //     console.log(resultlst);
+            // }
+
+            // test_func({{ piedata|safe }})
+
+            var chartValue = {{ piedata|safe }};  //  Counter({4.0: 4, 2.0: 3, 3.0: 2, 5.0: 2})
+            console.log(chartValue); //  Counter({4.0: 4, 2.0: 3, 3.0: 2, 5.0: 2})
+
+
+            // var data = [10, 50, 80];
+            var r = 125;
+            var color = d3.scale.ordinal()
+                .range(["red", "brown", "orange", "blue", "green"])
+
+            var data = chartValue;
+            // var data = [
+            //     {"star": "shanghai", "counts": 10},
+            //     {"star": "beijing", "counts": 30},
+            //     {"star": "tianjin", "counts": 20},
+            //     {"star": "shenzhen", "counts": 45},
+            //     {"star": "guangzhou", "counts": 130}
+            // ];
+
+            console.log(data);
+            var svg = d3.select("#area1").append("svg")
+                .attr("width", 800)
+                .attr("height", 500);
+    
+            //弧生成器，内圈和外圈
+            var arc = d3.svg.arc()
+                .innerRadius(150)
+                .outerRadius(r);
+    
+            var pie = d3.layout.pie()
+                .value(function (d) {
+                    return d.counts
+                })(data);
+            //数据转换
+            var pieData = pie;
+            
+            //g用于把相关元素进行组合的容器元素
+            var svgMain = svg.selectAll("g")
+                .data(pieData)
+                .enter()
+                .append("g")
+                .attr("transform", "translate(200, 250)");
+
+            svgMain.append("path")
+                .attr("fill", function (d, i) {
+                    return color(i)
+                })
+                .attr("d", function (d) {
+                    //调用弧生成器，得到路径值
+                    return arc(d)
+                })
+            //绘制图例区域
+            var legendArea = svg.append("g")
+                .attr("transform", "translate(0,450)");
+            //绑定数据，设置每个图例的位置
+            var legend = legendArea.selectAll("g")
+                .data(pieData)
+                .enter()
+                .append("g")
+                .attr("transform", function (d, i) {
+                    return "translate(" + i * 120 + ",0)";
+                });
+            //添加图例的矩形色块
+            legend.append("rect")
+                .attr("width", 20)
+                .attr("height", 20)
+                .style("fill", function (d, i) {
+                    return color(i)
+                });
+
+            //添加图例文字
+            legend.append("text")
+                .attr("x", 24)
+                .attr("y", 9)
+                .style("fill", function (d, i) {
+                    return color(i)
+                })
+                .attr("dy", ".35em")
+                .text(function (d, i) {
+                    return "[star]："+ d.data.star;
+                });
+
+        </script>
+        </div>
+{% endblock %}
+
+</div>
+{% block content %}
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <form action="{% url 'add_rating' movie.id %}" method="post" class="form">
+        <h3>給這個電影評分</h3>
+        {% csrf_token %}
+        {% bootstrap_form form layout='inline' %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">
+        {% bootstrap_icon "star" %} Add
+        </button>
+        {% endbuttons %}
+    </form>
+    <h3>其他人的評分:</h3>
+    {% if movie.rating_set.all %}
+        <div class="row">
+            {% for ra in movie.rating_set.all %}
+                <div class="col-xs-6 col-lg-4">
+                    <em>{{ ra.comment }}</em>
+                    <h6>Rated {{ ra.rating }} of 5 by <a href="/" >{{ ra.user.username }}</a></h6>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>你尚未有評分</p>
+    {% endif %}
+    
+{% endblock %}
